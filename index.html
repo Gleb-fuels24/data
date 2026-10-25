@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fuels24 — Deal Intelligence for Energy Equipment Makers</title>
+<meta name="description" content="Buyer maps, EPC backlog windows, trade-show sales-force allocation, tender game theory, live satellite and tanker tracking, and inbound email intelligence for oil &amp; gas equipment manufacturers. Subscription from $490/mo. Free trial.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b1016; --bg-2:#111822; --bg-3:#18212e;
+  --line:#243041; --text:#e8eef6; --muted:#8d9cb0;
+  --accent:#f5a623; --accent-2:#3ea6ff; --good:#3ddc97; --warn:#ff6b6b;
+  --radius:14px; --max:1180px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+a{color:inherit;text-decoration:none}
+h1,h2,h3{line-height:1.15;letter-spacing:-0.02em;font-weight:700}
+h1{font-size:clamp(2rem,5vw,3.4rem);font-weight:800}
+h2{font-size:clamp(1.6rem,3.4vw,2.4rem);margin-bottom:14px}
+h3{font-size:1.15rem;margin-bottom:8px}
+p{color:var(--muted)}
+section{padding:84px 0;border-top:1px solid var(--line)}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:block}
+.lead{font-size:1.08rem;max-width:760px}
+.mono{font-family:'JetBrains Mono',monospace}
+
+header{position:sticky;top:0;z-index:50;background:rgba(11,16,22,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:66px}
+.logo{font-weight:800;font-size:1.15rem;letter-spacing:-.03em}
+.logo span{color:var(--accent)}
+.nav-links{display:flex;gap:22px;align-items:center}
+.nav-links a{font-size:.88rem;color:var(--muted);transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-links a.live-link{color:var(--good)}
+@media(max-width:980px){.nav-links a:not(.btn){display:none}}
+
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#0b1016;font-weight:600;font-size:.92rem;padding:11px 20px;border-radius:9px;border:0;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(245,166,35,.25)}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+.btn-ghost:hover{border-color:var(--accent);box-shadow:none}
+
+.hero{padding:96px 0 80px;border-top:0}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:40px}}
+.hero h1 span{color:var(--accent)}
+.hero p.lead{margin:20px 0 28px;font-size:1.15rem}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+.hero-note{margin-top:16px;font-size:.84rem;color:var(--muted)}
+.hero-panel{background:linear-gradient(160deg,var(--bg-2),var(--bg-3));border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+.stat-row{display:flex;justify-content:space-between;gap:14px;padding:12px 0;border-bottom:1px solid var(--line);font-size:.9rem}
+.stat-row:last-of-type{border-bottom:0}
+.stat-row b{font-family:'JetBrains Mono',monospace;color:var(--accent);white-space:nowrap}
+.panel-title{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:1000px){.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.g2,.g3{grid-template-columns:1fr}}
+@media(max-width:620px){.g4{grid-template-columns:1fr}}
+.card{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius);padding:26px;transition:border-color .2s,transform .2s}
+.card:hover{border-color:#32415a;transform:translateY(-2px)}
+.card .tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-2);border:1px solid rgba(62,166,255,.3);border-radius:5px;padding:3px 8px;margin-bottom:14px}
+.card .tag.new{color:var(--good);border-color:rgba(61,220,151,.3)}
+.card .tag.free{color:var(--accent);border-color:rgba(245,166,35,.35)}
+.card p{font-size:.94rem}
+.card ul{margin-top:12px;padding-left:18px}
+.card li{font-size:.9rem;color:var(--muted);margin-bottom:5px}
+
+/* ---------- live tracker ---------- */
+.live{background:linear-gradient(150deg,#0e1620,#0b1016)}
+.live-head{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:26px}
+.pulse{display:inline-flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--good)}
+.pulse i{width:9px;height:9px;border-radius:50%;background:var(--good);box-shadow:0 0 0 0 rgba(61,220,151,.6);animation:pp 2s infinite}
+@keyframes pp{0%{box-shadow:0 0 0 0 rgba(61,220,151,.6)}70%{box-shadow:0 0 0 11px rgba(61,220,151,0)}100%{box-shadow:0 0 0 0 rgba(61,220,151,0)}}
+.demo-badge{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:#0b1016;background:var(--accent);border-radius:5px;padding:4px 9px}
+.live-panel{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.live-bar{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:14px 20px;border-bottom:1px solid var(--line);background:var(--bg-3);font-size:.82rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.live-cols{display:grid;grid-template-columns:1fr 1fr;gap:0}
+@media(max-width:860px){.live-cols{grid-template-columns:1fr}}
+.live-col{padding:22px}
+.live-col+.live-col{border-left:1px solid var(--line)}
+@media(max-width:860px){.live-col+.live-col{border-left:0;border-top:1px solid var(--line)}}
+.live-col h3{font-size:.78rem;font-family:'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(36,48,65,.6);font-size:.92rem}
+.row:last-child{border-bottom:0}
+.row .nm{display:flex;align-items:center;gap:10px}
+.dot{width:8px;height:8px;border-radius:50%;flex:0 0 8px}
+.dot.run{background:var(--good)} .dot.idle{background:var(--muted)}
+.dot.reb{background:var(--accent)} .dot.nod{background:#4a5567}
+.row .val{font-family:'JetBrains Mono',monospace;font-size:.84rem;color:var(--muted);white-space:nowrap}
+.live-foot{padding:16px 20px;border-top:1px solid var(--line);font-size:.78rem;color:#60708a}
+.live-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px;align-items:center}
+.skeleton{color:var(--muted);font-size:.9rem;padding:10px 0}
+
+/* ---------- table ---------- */
+.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius)}
+table{width:100%;border-collapse:collapse;font-size:.92rem;min-width:620px}
+th,td{padding:14px 18px;text-align:left;border-bottom:1px solid var(--line)}
+th{background:var(--bg-3);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+tr:last-child td{border-bottom:0}
+td.num{font-family:'JetBrains Mono',monospace}
+td.ours{color:var(--good);font-weight:600}
+.src{font-size:.78rem;color:#60708a;margin-top:12px}
+
+/* ---------- blurred dashboards ---------- */
+.dash{position:relative;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--bg-2);display:flex;flex-direction:column}
+.dash-preview{height:180px;position:relative;overflow:hidden}
+.dash-preview .fake{filter:blur(6px);padding:18px;opacity:.75;user-select:none}
+.dash-preview .fake .bar{height:9px;border-radius:4px;background:#2e3e55;margin-bottom:9px}
+.dash-preview .fake .bar.a{width:72%;background:#3b5273}
+.dash-preview .fake .bar.b{width:54%}
+.dash-preview .fake .bar.c{width:88%;background:#466282}
+.dash-preview .fake .chart{display:flex;align-items:flex-end;gap:7px;height:64px;margin-top:14px}
+.dash-preview .fake .chart i{flex:1;background:linear-gradient(180deg,#f5a623,#8a5c12);border-radius:3px 3px 0 0;display:block}
+.dash-lock{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:linear-gradient(180deg,rgba(11,16,22,.35),rgba(11,16,22,.85))}
+.dash-lock span{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:center;padding:0 10px}
+.dash-body{padding:20px 22px 24px;display:flex;flex-direction:column;flex:1}
+.dash-body h3{margin-bottom:6px;font-size:1.02rem}
+.dash-body p{font-size:.88rem;margin-bottom:16px;flex:1}
+
+/* ---------- video ---------- */
+.video-card{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.video-frame{position:relative;padding-top:56.25%;background:#060a0f}
+.video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.video-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--muted);font-size:.84rem;text-align:center;padding:18px}
+.play{width:46px;height:46px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center}
+.play::after{content:"";border-left:13px solid #0b1016;border-top:8px solid transparent;border-bottom:8px solid transparent;margin-left:4px}
+.video-meta{padding:15px 18px;font-size:.86rem}
+.video-meta b{display:block;margin-bottom:3px}
+.video-meta span{color:var(--muted)}
+
+/* ---------- pricing ---------- */
+.price-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:1000px){.price-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.price-grid{grid-template-columns:1fr}}
+.plan{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius);padding:26px;display:flex;flex-direction:column}
+.plan.featured{border-color:var(--accent);box-shadow:0 0 0 1px rgba(245,166,35,.25)}
+.plan .badge{font-family:'JetBrains Mono',monospace;font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.plan .amount{font-size:2rem;font-weight:800;letter-spacing:-.03em;margin:6px 0 2px}
+.plan .amount small{font-size:.85rem;font-weight:500;color:var(--muted);letter-spacing:0}
+.plan ul{list-style:none;margin:18px 0 22px;flex:1}
+.plan li{font-size:.86rem;color:var(--muted);padding:7px 0 7px 22px;position:relative}
+.plan li::before{content:"";position:absolute;left:0;top:14px;width:9px;height:9px;border-radius:50%;background:rgba(61,220,151,.18);border:1px solid var(--good)}
+.plan .btn{width:100%;justify-content:center}
+
+.cred{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:34px}
+@media(max-width:900px){.cred{grid-template-columns:repeat(2,1fr)}}
+.cred div{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+.cred b{display:block;font-size:1.7rem;font-weight:800;color:var(--accent);font-family:'JetBrains Mono',monospace;letter-spacing:-.03em}
+.cred span{font-size:.84rem;color:var(--muted)}
+.geo{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.geo i{font-style:normal;font-size:.8rem;border:1px solid var(--line);border-radius:20px;padding:5px 13px;color:var(--muted)}
+
+.cta-box{background:linear-gradient(140deg,#1a2433,#101722);border:1px solid var(--line);border-radius:var(--radius);padding:44px;text-align:center}
+.cta-box h2{margin-bottom:10px}
+.cta-box .hero-cta{justify-content:center;margin-top:24px}
+footer{padding:46px 0;border-top:1px solid var(--line);font-size:.86rem;color:var(--muted)}
+.foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer a{color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+footer a:hover{color:var(--text)}
+
+/* ---------- purchase ---------- */
+.buy{margin-top:18px;width:100%;justify-content:center}
+.card .buy{margin-top:20px}
+.modal{position:fixed;inset:0;z-index:100;display:none;align-items:flex-start;justify-content:center;padding:28px 16px;overflow-y:auto;background:rgba(5,8,12,.78);backdrop-filter:blur(5px)}
+.modal.open{display:flex}
+.modal-box{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius);max-width:560px;width:100%;margin:auto;padding:30px}
+.modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:6px}
+.modal-head h3{font-size:1.3rem}
+.x{background:none;border:0;color:var(--muted);font-size:1.6rem;line-height:1;cursor:pointer;padding:0 4px}
+.x:hover{color:var(--text)}
+.modal .item{font-family:'JetBrains Mono',monospace;font-size:.86rem;color:var(--accent);margin-bottom:20px}
+.routes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}
+@media(max-width:520px){.routes{grid-template-columns:1fr}}
+.route{border:1px solid var(--line);background:var(--bg-3);border-radius:10px;padding:13px 15px;cursor:pointer;text-align:left;color:var(--text);font-size:.88rem;font-weight:600;transition:border-color .15s}
+.route small{display:block;font-weight:400;color:var(--muted);font-size:.78rem;margin-top:3px}
+.route.active{border-color:var(--accent)}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:.78rem;color:var(--muted);margin-bottom:5px}
+.field input,.field select{width:100%;background:var(--bg-3);border:1px solid var(--line);border-radius:8px;padding:10px 12px;color:var(--text);font-family:inherit;font-size:.92rem}
+.field input:focus,.field select:focus{outline:0;border-color:var(--accent)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:520px){.two{grid-template-columns:1fr}}
+.modal-note{font-size:.78rem;color:#60708a;margin-top:14px}
+.modal-msg{display:none;margin-top:16px;padding:14px 16px;border-radius:9px;font-size:.9rem;line-height:1.5}
+.modal-msg.ok{display:block;background:rgba(61,220,151,.1);border:1px solid rgba(61,220,151,.35);color:var(--good)}
+.modal-msg.err{display:block;background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.35);color:var(--warn)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="#top" class="logo">Fuels<span>24</span></a>
+    <nav class="nav-links">
+      <a href="#live" class="live-link">● Live tracker</a>
+      <a href="#what">Products</a>
+      <a href="#video">Videos</a>
+      <a href="#price-why">Why cheaper</a>
+      <a href="#samples">Samples</a>
+      <a href="#pricing">Pricing</a>
+      <a class="btn" href="https://calendly.com/7989347/30min" target="_blank" rel="noopener">Book a 30-min call</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Deal intelligence for energy equipment makers</span>
+      <h1>Market data tells you what happened.<br><span>We tell you who to call on Monday.</span></h1>
+      <p class="lead">Fuels24 turns public project data, satellite imagery, live vessel movements and your own inbox into a ranked list of buyers, open tenders and decision-makers for your specific product line — in two weeks, at a fraction of what a global research subscription costs.</p>
+      <div class="hero-cta">
+        <a class="btn" href="#live">Open the live tracker — free</a>
+        <a class="btn btn-ghost" href="#pricing">Start 14-day trial</a>
+      </div>
+      <p class="hero-note">The live tracker is open to everyone, no sign-up. Sample dashboards download instantly — key pages blurred until you subscribe.</p>
+    </div>
+    <div class="hero-panel">
+      <div class="panel-title">What a subscription replaces</div>
+      <div class="stat-row"><span>Global upstream database subscription</span><b>$75,000/yr</b></div>
+      <div class="stat-row"><span>Gas &amp; LNG market subscription</span><b>$79,000/yr</b></div>
+      <div class="stat-row"><span>Multi-module national licence</span><b>~$375,000/yr</b></div>
+      <div class="stat-row"><span>A full-time market analyst (Gulf)</span><b>$60,000+/yr</b></div>
+      <div class="stat-row"><span><strong style="color:var(--text)">Fuels24 Growth plan</strong></span><b style="color:var(--good)">$11,880/yr</b></div>
+      <p class="src" style="margin-top:14px">Top three figures are real published prices paid by government buyers for commercial energy-research subscriptions (US DOE, US State Department, Energy Market Authority of Singapore, 2025).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LIVE TRACKER (LEAD MAGNET) ================= -->
+<section class="live" id="live">
+  <div class="wrap">
+    <div class="live-head">
+      <div>
+        <span class="pulse"><i></i> Live — updates every 6 hours</span>
+        <h2 style="margin-top:12px">Ras Laffan LNG: what is actually running right now</h2>
+        <p class="lead">The world's largest liquefaction complex, read off free satellite imagery and open vessel transponders. No login, no paywall, no sign-up. This is one site out of the dozens we monitor for subscribers — it is here so you can judge the quality of our work before you talk to us.</p>
+      </div>
+    </div>
+
+    <div class="live-panel">
+      <div class="live-bar">
+        <span>SITE: <span id="lv-site">Ras Laffan, Qatar</span></span>
+        <span>LAST UPDATE: <span id="lv-updated">—</span> <span id="lv-demo"></span></span>
+      </div>
+      <div class="live-cols">
+        <div class="live-col">
+          <h3>Liquefaction trains — thermal signature</h3>
+          <div id="lv-trains"><div class="skeleton">Loading live feed…</div></div>
+        </div>
+        <div class="live-col">
+          <h3>Gas carriers at berth now</h3>
+          <div id="lv-vessels"><div class="skeleton">Loading live feed…</div></div>
+          <div id="lv-stats" style="margin-top:16px"></div>
+        </div>
+      </div>
+      <div class="live-foot">
+        Sources: Sentinel-2 optical and SWIR imagery, 10 m resolution (Copernicus, European Union) · VIIRS active-fire radiative power, 375 m (NASA FIRMS) · AIS vessel transponders (aisstream.io). Classification is automated and then reviewed by an analyst. A berth maps to a joint venture, not to an individual train: LNG from all trains flows into shared storage before loading, so any claim that ties one cargo to one train is guesswork.
+      </div>
+    </div>
+
+    <div class="live-cta">
+      <a class="btn" href="https://calendly.com/7989347/30min" target="_blank" rel="noopener">Get this for your own sites</a>
+      <a class="btn btn-ghost" href="mailto:z@fuels24.com?subject=Live%20tracker%20—%20daily%20brief">Email me the daily brief</a>
+      <span style="font-size:.84rem;color:var(--muted)">Subscribers get the same feed for their own target terminals, refineries and construction sites, with a written verdict instead of raw status.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WHAT YOU GET ================= -->
+<section id="what">
+  <div class="wrap">
+    <span class="eyebrow">What you get</span>
+    <h2>Eight intelligence products, one subscription</h2>
+    <p class="lead" style="margin-bottom:34px">Every deliverable answers a commercial question, not an academic one. You get names, dates, budgets and entry routes — formatted so your sales team can act the same day.</p>
+
+    <div class="grid g3">
+
+      <div class="card">
+        <span class="tag">Core</span>
+        <h3>Buyer Map</h3>
+        <p>15–25 ranked buyer and EPC profiles for your exact product line.</p>
+        <ul>
+          <li>Who they are and what they are building now</li>
+          <li>Which of your SKUs fit which project</li>
+          <li>Named decision-makers and their role in the buying centre</li>
+          <li>Entry route: tender, framework, agent or direct</li>
+        </ul>
+        <button class="btn buy" data-item="Buyer Map" data-price="1400" data-kind="one-off">Purchase now — $1,400</button>
+      </div>
+
+      <div class="card">
+        <span class="tag">Core</span>
+        <h3>EPC Backlog Windows</h3>
+        <p>Contractor backlogs broken down into the line items that need your equipment.</p>
+        <ul>
+          <li>Awarded packages by contractor and country</li>
+          <li>Estimated month each package hits procurement</li>
+          <li>Pre-qualification and ICV requirements per client</li>
+          <li>Refreshed every quarter</li>
+        </ul>
+        <button class="btn buy" data-item="EPC Backlog Windows" data-price="2400" data-kind="one-off">Purchase now — $2,400</button>
+      </div>
+
+      <div class="card">
+        <span class="tag">Core</span>
+        <h3>End-User Demand Analysis</h3>
+        <p>Operators and processors: what they are building, upgrading and replacing.</p>
+        <ul>
+          <li>Capex and turnaround calendars</li>
+          <li>Replacement cycle for your equipment class</li>
+          <li>Category owners inside each operator</li>
+          <li>Incumbent suppliers and where they are weak</li>
+        </ul>
+        <button class="btn buy" data-item="End-User Demand Analysis" data-price="2900" data-kind="one-off">Purchase now — $2,900</button>
+      </div>
+
+      <div class="card">
+        <span class="tag new">New</span>
+        <h3>Trade-Show Sales Force Allocation</h3>
+        <p>An exhibition is four days and a finite number of conversations. We turn the official exhibitor file into a routed plan for your team.</p>
+        <ul>
+          <li>Every exhibitor screened against dated public reporting: awards, FIDs, procurement plans, filings</li>
+          <li>Targets rated by role and by timing, plotted on a sector radar</li>
+          <li>Per-target card: stand, demand analysis, opening line, the ask</li>
+          <li>Day-by-day allocation of each person on your team to stands, delegations and conference sessions</li>
+          <li>Operating rules for the floor, a debrief rhythm, and live status tracking with CSV export</li>
+        </ul>
+        <button class="btn buy" data-item="Trade-Show Sales Force Allocation" data-price="1400" data-kind="one-off">Purchase now — $1,400</button>
+      </div>
+
+      <div class="card">
+        <span class="tag new">New</span>
+        <h3>Tender Game Theory</h3>
+        <p>A tender is not a price list — it is a game against a known set of competitors under known rules. We model it as one.</p>
+        <ul>
+          <li>Who else is bidding, and what they bid on comparable tenders</li>
+          <li>Each competitor's cost floor, backlog pressure and appetite to win</li>
+          <li>The evaluation formula decoded: where points are actually won</li>
+          <li>Bid ladder: three price-and-scope options with win probability for each</li>
+          <li>Where to concede, where to hold, and what to put in the technical envelope</li>
+        </ul>
+        <button class="btn buy" data-item="Tender Game Theory" data-price="3500" data-kind="one-off">Purchase now — $3,500</button>
+      </div>
+
+      <div class="card">
+        <span class="tag free">Free sample above</span>
+        <h3>Satellite Snapshot Analysis</h3>
+        <p>We read construction and operational reality off recent optical and radar imagery — not off press releases.</p>
+        <ul>
+          <li>Site-by-site construction progress on named projects</li>
+          <li>Laydown yards, module counts, crane and rig presence</li>
+          <li>Flaring and thermal activity as a proxy for plant uptime</li>
+          <li>Storage tank float levels and utilisation trends</li>
+          <li>Verdict in plain language: is this project real, delayed or stalled</li>
+        </ul>
+        <button class="btn buy" data-item="Satellite Snapshot Analysis" data-price="1900" data-kind="one-off">Purchase now — $1,900</button>
+      </div>
+
+      <div class="card">
+        <span class="tag free">Free sample above</span>
+        <h3>Tanker Tracking AI Analysis</h3>
+        <p>Live AIS vessel movement, parsed by model and reviewed by an analyst, turned into commercial signals.</p>
+        <ul>
+          <li>Crude, product and LNG flows into and out of your target markets</li>
+          <li>Port call frequency and berth congestion at client terminals</li>
+          <li>Ship-to-ship transfers and dark-fleet anomalies</li>
+          <li>Floating storage build-ups that precede demand shifts</li>
+          <li>Early read on which refineries and terminals are about to run hot</li>
+        </ul>
+        <button class="btn buy" data-item="Tanker Tracking AI Analysis" data-price="1900" data-kind="one-off">Purchase now — $1,900</button>
+      </div>
+
+      <div class="card">
+        <span class="tag new">New</span>
+        <h3>Inbound Email Intelligence</h3>
+        <p>Your own mailbox is the most underused dataset in your company. We connect it, classify it and score it.</p>
+        <ul>
+          <li>Every inbound enquiry scored for real buying intent</li>
+          <li>Automatic enrichment: who wrote, which company, which project</li>
+          <li>Dormant threads that went quiet near a decision, resurfaced</li>
+          <li>RFQ patterns that show where demand is actually moving</li>
+          <li>Daily digest: five emails that deserve a reply before lunch</li>
+        </ul>
+        <button class="btn buy" data-item="Inbound Email Intelligence — setup" data-price="2400" data-kind="one-off">Purchase now — $2,400</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= VIDEO ================= -->
+<section id="video">
+  <div class="wrap">
+    <span class="eyebrow">One video per product</span>
+    <h2>Eight products, eight videos, no overlap</h2>
+    <p class="lead" style="margin-bottom:34px">Each runs under two minutes and shows one deliverable only. Watch the one you need; skip the rest.</p>
+
+    <div class="grid g4">
+
+      <!-- VIDEO 1 — Buyer Map -->
+      <div class="video-card">
+        <div class="video-frame">
+          <!-- HeyGen: <iframe src="https://app.heygen.com/embeds/VIDEO_ID_BUYER_MAP" allowfullscreen allow="encrypted-media; fullscreen"></iframe> -->
+          <div class="video-placeholder"><div class="play"></div><span>01 — Buyer Map</span></div>
+        </div>
+        <div class="video-meta"><b>Buyer Map</b><span>What a buyer card contains and how a rep uses it.</span></div>
+      </div>
+
+      <!-- VIDEO 2 — EPC Backlog Windows -->
+      <div class="video-card">
+        <div class="video-frame">
+          <!-- HeyGen: <iframe src="https://app.heygen.com/embeds/VIDEO_ID_EPC_BACKLOG" allowfullscreen allow="encrypted-media; fullscreen"></iframe> -->
+          <div class="video-placeholder"><div class="play"></div><span>02 — EPC Backlog Windows</span></div>
+        </div>
+        <div class="video-meta"><b>EPC Backlog Windows</b><span>How an awarded package becomes a dated procurement window.</span></div>
+      </div>
+
+      <!-- VIDEO 3 — End-User Demand -->
+      <div class="video-card">
+        <div class="video-frame">
+          <!-- HeyGen: <iframe src="https://app.heygen.com/embeds/VIDEO_ID_END_USER_DEMAND" allowfullscreen allow="encrypted-media; fullscreen"></iframe> -->
+          <div class="video-placeholder"><div class="play"></div><span>03 — End-User Demand</span></div>
+        </div>
+        <div class="video-meta"><b>End-User Demand Analysis</b><span>Reading an operator's turnaround and replacement cycle.</span></div>
+      </div>
+
+      <!-- VIDEO 4 — Trade-Show Allocation -->
+      <div class="video-card">
+        <div class="video-frame">
+          <!-- HeyGen: <iframe src="https://app.heygen.com/embeds/VIDEO_ID_TRADE_SHOW" allowfullscreen allow="encrypted-media; fullscreen"></iframe> -->
+          <div class="video-placeholder"><div class="play"></div><span>04 — Trade-Show Allocation</span></div>
+        </div>
+        <div class="video-meta"><b>Trade-Show Sales Force Allocation</b><span>Four people, four days, one routed plan.</span></div>
+      </div>
+
+      <!-- VIDEO 5 — Tender Game Theory -->
+      <div class="video-card">
+        <div class="video-frame">
+          <!-- HeyGen: <iframe src="https://app.heygen.com/embeds/VIDEO_ID_GAME_THEORY" allowfullscreen allow="encrypted-media; fullscreen"></iframe> -->
+          <div class="video-placeholder"><div class="play"></div><span>05 — Tender Game Theory</span></div>
+        </div>
+        <div class="video-meta"><b>Tender Game Theory</b><span>Building the bid ladder and reading the evaluation formula.</span></div>
+      </div>
+
+      <!-- VIDEO 6 — Satellite -->
+      <div class="video-card">
+        <div class="video-frame">
+          <!-- HeyGen: <iframe src="https://app.heygen.com/embeds/VIDEO_ID_SATELLITE" allowfullscreen allow="encrypted-media; fullscreen"></iframe> -->
+          <div class="video-placeholder"><div class="play"></div><span>06 — Satellite Snapshot</span></div>
+        </div>
+        <div class="video-meta"><b>Satellite Snapshot Analysis</b><span>Telling a real construction site from a press release.</span></div>
+      </div>
+
+      <!-- VIDEO 7 — Tanker Tracking -->
+      <div class="video-card">
+        <div class="video-frame">
+          <!-- HeyGen: <iframe src="https://app.heygen.com/embeds/VIDEO_ID_TANKER" allowfullscreen allow="encrypted-media; fullscreen"></iframe> -->
+          <div class="video-placeholder"><div class="play"></div><span>07 — Tanker Tracking AI</span></div>
+        </div>
+        <div class="video-meta"><b>Tanker Tracking AI Analysis</b><span>From a transponder ping to a demand signal.</span></div>
+      </div>
+
+      <!-- VIDEO 8 — Email Intelligence -->
+      <div class="video-card">
+        <div class="video-frame">
+          <!-- HeyGen: <iframe src="https://app.heygen.com/embeds/VIDEO_ID_EMAIL" allowfullscreen allow="encrypted-media; fullscreen"></iframe> -->
+          <div class="video-placeholder"><div class="play"></div><span>08 — Inbound Email Intelligence</span></div>
+        </div>
+        <div class="video-meta"><b>Inbound Email Intelligence</b><span>Scoring the five emails that deserve a reply today.</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= WHY CHEAPER ================= -->
+<section id="price-why">
+  <div class="wrap">
+    <span class="eyebrow">Why we are cheaper</span>
+    <h2>We are not a smaller version of a research house. We solve a different problem.</h2>
+    <p class="lead" style="margin-bottom:30px">Global research subscriptions are built for strategy departments at national oil companies and investment banks. They model 65,000 fields so an analyst can forecast 2050 supply. That machine costs a fortune to run, and you pay for all of it — including the 90% you will never open. We start from your product catalogue and stop at the buyer's desk.</p>
+
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Question you actually have</th><th>Global research subscription</th><th>Fuels24</th></tr></thead>
+        <tbody>
+          <tr><td>What will global supply look like in 2040?</td><td class="num">Excellent</td><td class="num" style="color:var(--muted)">Not our job</td></tr>
+          <tr><td>Which 20 companies will buy my product next year?</td><td class="num" style="color:var(--muted)">Not covered</td><td class="num ours">Core deliverable</td></tr>
+          <tr><td>Who inside those companies signs the PO?</td><td class="num" style="color:var(--muted)">Not covered</td><td class="num ours">Named, with role</td></tr>
+          <tr><td>Where do I send my four people at the show?</td><td class="num" style="color:var(--muted)">Not covered</td><td class="num ours">Day-by-day plan</td></tr>
+          <tr><td>Is that announced project actually being built?</td><td class="num" style="color:var(--muted)">Press-release based</td><td class="num ours">Satellite-verified</td></tr>
+          <tr><td>Entry price</td><td class="num">$75,000+ per year</td><td class="num ours">$490 per month</td></tr>
+          <tr><td>Time to first usable output</td><td class="num">4–8 weeks onboarding</td><td class="num ours">10 working days</td></tr>
+          <tr><td>Tailored to your SKU list</td><td class="num" style="color:var(--muted)">No — generic modules</td><td class="num ours">Yes — built from it</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="src">Benchmark prices are published government procurement records for commercial energy-research subscriptions: US Department of Energy upstream database subscription ($75,000, FY2026), US Department of State gas &amp; LNG subscription ($79,000, Sept 2025), UK government critical-minerals data subscription (£35,000, 2022), Energy Market Authority of Singapore database and analytics award (S$485,129, July 2025).</p>
+
+    <div class="grid g3" style="margin-top:32px">
+      <div class="card"><h3>No 1,100-person payroll</h3><p>We run a small senior team with AI doing collection and classification. You pay for judgement, not for headcount.</p></div>
+      <div class="card"><h3>Free data, paid interpretation</h3><p>Sentinel-2, VIIRS and AIS cost nothing. What costs money is knowing which pixel and which transponder matter to your order book.</p></div>
+      <div class="card"><h3>No annual lock-in</h3><p>Monthly subscription, cancel any time. A one-off project credits in full against your first subscription payment.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SAMPLES ================= -->
+<section id="samples">
+  <div class="wrap">
+    <span class="eyebrow">See it before you pay</span>
+    <h2>Download a sample of every product</h2>
+    <p class="lead" style="margin-bottom:34px">Real deliverables from live engagements, anonymised. One card or page of each is fully open; the rest is withheld — and withheld properly, with the content removed from the file rather than covered over, so nothing is recoverable from the page source. Subscribe or start the trial and we send the unlocked file within one business day. No form, no email gate: the download starts when you click.</p>
+
+    <div class="grid g4">
+
+      <div class="dash">
+        <div class="dash-preview">
+          <div class="fake"><div class="bar a"></div><div class="bar b"></div><div class="bar"></div>
+            <div class="chart"><i style="height:40%"></i><i style="height:72%"></i><i style="height:55%"></i><i style="height:92%"></i><i style="height:61%"></i><i style="height:78%"></i><i style="height:44%"></i></div></div>
+          <div class="dash-lock"><span>1 of 22 cards open</span></div>
+        </div>
+        <div class="dash-body">
+          <h3>Buyer Map</h3>
+          <p>22 buyer cards for a Gulf equipment maker. Card 1 fully open.</p>
+          <a class="btn" href="samples/fuels24-buyer-map-sample.html" download>Download sample</a>
+        </div>
+      </div>
+
+      <div class="dash">
+        <div class="dash-preview">
+          <div class="fake"><div class="bar"></div><div class="bar a"></div><div class="bar b"></div>
+            <div class="chart"><i style="height:85%"></i><i style="height:48%"></i><i style="height:67%"></i><i style="height:35%"></i><i style="height:90%"></i><i style="height:58%"></i><i style="height:73%"></i></div></div>
+          <div class="dash-lock"><span>2 of 14 packages open</span></div>
+        </div>
+        <div class="dash-body">
+          <h3>EPC Backlog Windows</h3>
+          <p>Contractor backlogs mapped to procurement months across the GCC.</p>
+          <a class="btn" href="samples/fuels24-epc-backlog-sample.html" download>Download sample</a>
+        </div>
+      </div>
+
+      <div class="dash">
+        <div class="dash-preview">
+          <div class="fake"><div class="bar b"></div><div class="bar c"></div><div class="bar a"></div>
+            <div class="chart"><i style="height:52%"></i><i style="height:88%"></i><i style="height:41%"></i><i style="height:76%"></i><i style="height:63%"></i><i style="height:95%"></i><i style="height:50%"></i></div></div>
+          <div class="dash-lock"><span>1 of 9 operators open</span></div>
+        </div>
+        <div class="dash-body">
+          <h3>End-User Demand Analysis</h3>
+          <p>Turnaround calendars and replacement cycles for one equipment class.</p>
+          <a class="btn" href="samples/fuels24-end-user-demand-sample.html" download>Download sample</a>
+        </div>
+      </div>
+
+      <div class="dash">
+        <div class="dash-preview">
+          <div class="fake"><div class="bar c"></div><div class="bar"></div><div class="bar b"></div>
+            <div class="chart"><i style="height:70%"></i><i style="height:36%"></i><i style="height:82%"></i><i style="height:58%"></i><i style="height:44%"></i><i style="height:91%"></i><i style="height:66%"></i></div></div>
+          <div class="dash-lock"><span>Targets tab open · 27 cards withheld</span></div>
+        </div>
+        <div class="dash-body">
+          <h3>Trade-Show Allocation</h3>
+          <p>Live target board: radar, routes and a four-person day-by-day plan.</p>
+          <a class="btn" href="samples/fuels24-tradeshow-board-sample.html" download>Download sample</a>
+        </div>
+      </div>
+
+      <div class="dash">
+        <div class="dash-preview">
+          <div class="fake"><div class="bar a"></div><div class="bar c"></div><div class="bar"></div>
+            <div class="chart"><i style="height:48%"></i><i style="height:93%"></i><i style="height:62%"></i><i style="height:38%"></i><i style="height:80%"></i><i style="height:55%"></i><i style="height:71%"></i></div></div>
+          <div class="dash-lock"><span>Bid ladder open · competitor models withheld</span></div>
+        </div>
+        <div class="dash-body">
+          <h3>Tender Game Theory</h3>
+          <p>One live tender modelled: three bid options with win probability.</p>
+          <a class="btn" href="samples/fuels24-tender-game-theory-sample.html" download>Download sample</a>
+        </div>
+      </div>
+
+      <div class="dash">
+        <div class="dash-preview">
+          <div class="fake"><div class="bar b"></div><div class="bar a"></div><div class="bar c"></div>
+            <div class="chart"><i style="height:88%"></i><i style="height:51%"></i><i style="height:74%"></i><i style="height:42%"></i><i style="height:96%"></i><i style="height:60%"></i><i style="height:47%"></i></div></div>
+          <div class="dash-lock"><span>1 of 12 sites open</span></div>
+        </div>
+        <div class="dash-body">
+          <h3>Satellite Snapshot</h3>
+          <p>Imagery-verified construction status with dated chips per site.</p>
+          <a class="btn" href="samples/fuels24-satellite-snapshot-sample.html" download>Download sample</a>
+        </div>
+      </div>
+
+      <div class="dash">
+        <div class="dash-preview">
+          <div class="fake"><div class="bar"></div><div class="bar b"></div><div class="bar a"></div>
+            <div class="chart"><i style="height:57%"></i><i style="height:79%"></i><i style="height:45%"></i><i style="height:86%"></i><i style="height:68%"></i><i style="height:39%"></i><i style="height:92%"></i></div></div>
+          <div class="dash-lock"><span>One terminal open · fleet detail withheld</span></div>
+        </div>
+        <div class="dash-body">
+          <h3>Tanker Tracking Brief</h3>
+          <p>Berth congestion and flow read for one market, from live AIS.</p>
+          <a class="btn" href="samples/fuels24-tanker-tracking-sample.html" download>Download sample</a>
+        </div>
+      </div>
+
+      <div class="dash">
+        <div class="dash-preview">
+          <div class="fake"><div class="bar c"></div><div class="bar b"></div><div class="bar"></div>
+            <div class="chart"><i style="height:64%"></i><i style="height:41%"></i><i style="height:89%"></i><i style="height:53%"></i><i style="height:77%"></i><i style="height:46%"></i><i style="height:83%"></i></div></div>
+          <div class="dash-lock"><span>Daily digest open · scoring model withheld</span></div>
+        </div>
+        <div class="dash-body">
+          <h3>Inbound Email Intelligence</h3>
+          <p>One day's digest: scored enquiries and revived dormant threads.</p>
+          <a class="btn" href="samples/fuels24-email-intelligence-sample.html" download>Download sample</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRICING ================= -->
+<section id="pricing">
+  <div class="wrap">
+    <span class="eyebrow">Pricing</span>
+    <h2>Subscription, monthly, cancel any time</h2>
+    <p class="lead" style="margin-bottom:34px">Start with the trial. If the first dashboard is not what you expected, tell us within 7 days and we refund in full — no questions, no retention call.</p>
+
+    <div class="price-grid">
+
+      <div class="plan">
+        <span class="badge">Trial</span>
+        <div class="amount">Free <small>/ 14 days</small></div>
+        <p style="font-size:.86rem">Prove it on one market before you commit.</p>
+        <ul>
+          <li>One Buyer Map, 5 buyer cards</li>
+          <li>One satellite snapshot on a project you name</li>
+          <li>Live tracker on one site of your choice</li>
+          <li>Unlocked sample dashboards</li>
+          <li>One 30-minute review call</li>
+          <li>No card required</li>
+        </ul>
+        <a class="btn btn-ghost" href="https://calendly.com/7989347/30min" target="_blank" rel="noopener">Start trial</a>
+      </div>
+
+      <div class="plan">
+        <span class="badge">Starter</span>
+        <div class="amount">$490 <small>/ month</small></div>
+        <p style="font-size:.86rem">For distributors and teams under 50 people.</p>
+        <ul>
+          <li>Buyer Map refreshed quarterly</li>
+          <li>Monthly tender &amp; award digest</li>
+          <li>Live tracker, 2 sites</li>
+          <li>One market, one product line</li>
+          <li>Email support</li>
+        </ul>
+        <button class="btn btn-ghost buy" data-item="Starter plan" data-price="490" data-kind="subscription">Purchase now</button>
+      </div>
+
+      <div class="plan featured">
+        <span class="badge">Most popular</span>
+        <div class="amount">$990 <small>/ month</small></div>
+        <p style="font-size:.86rem">For manufacturers of 50–200 people.</p>
+        <ul>
+          <li>Everything in Starter</li>
+          <li>EPC Backlog Windows, quarterly</li>
+          <li>Trade-show allocation, one show per year</li>
+          <li>Tender game theory, one live bid per month</li>
+          <li>Satellite snapshot, 4 projects per month</li>
+          <li>Live tracker, 10 sites + monthly tanker brief</li>
+          <li>Inbound email intelligence, one mailbox</li>
+          <li>Two markets, full product line</li>
+          <li>Monthly analyst call</li>
+        </ul>
+        <button class="btn buy" data-item="Growth plan" data-price="990" data-kind="subscription">Purchase now</button>
+      </div>
+
+      <div class="plan">
+        <span class="badge">Enterprise</span>
+        <div class="amount">$2,900 <small>/ month</small></div>
+        <p style="font-size:.86rem">For groups of 200+ and multi-country sales teams.</p>
+        <ul>
+          <li>Everything in Growth</li>
+          <li>Unlimited markets and product lines</li>
+          <li>Trade-show allocation for every show you attend</li>
+          <li>Tender game theory on every live bid</li>
+          <li>Live tracker, unlimited sites, 6-hour refresh</li>
+          <li>Email intelligence across the sales team</li>
+          <li>Competitor tracking: portfolio, financials, key people</li>
+          <li>Named analyst, weekly call</li>
+        </ul>
+        <button class="btn btn-ghost buy" data-item="Enterprise plan" data-price="2900" data-kind="subscription">Purchase now</button>
+      </div>
+
+    </div>
+    <p class="src">Prices in USD, billed monthly. Annual payment: two months free. A one-off project is credited in full against your first subscription payment.</p>
+  </div>
+</section>
+
+<!-- ================= TEAM ================= -->
+<section id="team">
+  <div class="wrap">
+    <span class="eyebrow">Why us</span>
+    <h2>Twenty years of closing energy deals, now wired to AI</h2>
+
+    <div class="cred" style="margin-top:28px">
+      <div><b>$1bn+</b><span>Disclosed transaction value worked on</span></div>
+      <div><b>20 yrs</b><span>Oil, gas and power deal-making and financing</span></div>
+      <div><b>15+</b><span>Transactions from $20m to $120m closed</span></div>
+      <div><b>7 yrs</b><span>Building an AI energy marketplace</span></div>
+    </div>
+
+    <div class="grid g2">
+      <div class="card">
+        <span class="tag">Commercial</span>
+        <h3>Gleb N. Zamyatin, MSc — Founder</h3>
+        <p>Two decades in oil, gas and power transactions: M&amp;A, private placements, project and debt finance, valuation and due diligence. Mandates across the UAE, Kuwait, Bahrain, Indonesia, the Maldives, the United States, the United Kingdom and the Caspian — including two IPPs, a $100m exploration private equity raise, and a technology market-entry programme in the Gulf. Seven years building AI-Fuels24, an AI-driven energy marketplace, selling into Europe and the US.</p>
+        <p style="margin-top:12px">Responsible for market access, buyer identification and deal routing.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Engineering</span>
+        <h3>Maria Poddubskaya — AI Engineering Lab</h3>
+        <p>Founder of AI Engineering Lab. Leads the technical side: the imagery and AIS pipelines behind the live tracker, model-assisted classification of inbound correspondence, and the dashboards your team opens every morning. Everything we ship is built in-house, so a change you ask for on Tuesday is live on Thursday.</p>
+        <p style="margin-top:12px">Responsible for data engineering, AI models and delivery.</p>
+      </div>
+    </div>
+
+    <div class="geo">
+      <i>UAE</i><i>Qatar</i><i>Kuwait</i><i>Bahrain</i><i>Saudi Arabia</i><i>Oman</i><i>India</i><i>Indonesia</i><i>Maldives</i><i>United States</i><i>United Kingdom</i><i>Caspian region</i><i>CIS</i>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA ================= -->
+<section>
+  <div class="wrap">
+    <div class="cta-box">
+      <h2>Start with one market and one product line</h2>
+      <p class="lead" style="margin:0 auto">Fourteen days, no card, one real deliverable. Not what you expected? Tell us within 7 days and we refund in full.</p>
+      <div class="hero-cta">
+        <a class="btn" href="https://calendly.com/7989347/30min" target="_blank" rel="noopener">Book a 30-minute call</a>
+        <a class="btn btn-ghost" href="mailto:z@fuels24.com?subject=Fuels24%20trial%20request">Email us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PURCHASE MODAL ================= -->
+<div class="modal" id="buy-modal" role="dialog" aria-modal="true" aria-labelledby="buy-title">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="buy-title">Purchase</h3>
+      <button class="x" id="buy-close" aria-label="Close">&times;</button>
+    </div>
+    <div class="item" id="buy-item">—</div>
+
+    <div class="routes">
+      <button class="route active" data-route="invoice" type="button">Invoice / bank transfer
+        <small>PDF invoice issued instantly</small></button>
+      <button class="route" data-route="card" type="button">Pay by card
+        <small>Secure checkout, starts today</small></button>
+    </div>
+
+    <form id="buy-form" novalidate>
+      <div class="two">
+        <div class="field"><label for="f-name">Full name *</label><input id="f-name" name="name" required autocomplete="name"></div>
+        <div class="field"><label for="f-email">Work email *</label><input id="f-email" name="email" type="email" required autocomplete="email"></div>
+      </div>
+      <div class="field"><label for="f-company">Company (as it should appear on the invoice) *</label><input id="f-company" name="company" required autocomplete="organization"></div>
+      <div class="two">
+        <div class="field"><label for="f-country">Country *</label><input id="f-country" name="country" required autocomplete="country-name"></div>
+        <div class="field"><label for="f-tax">VAT / TRN / tax number</label><input id="f-tax" name="tax_id" autocomplete="off"></div>
+      </div>
+      <div class="field"><label for="f-address">Billing address</label><input id="f-address" name="address" autocomplete="street-address"></div>
+      <div class="two">
+        <div class="field" id="term-wrap"><label for="f-term">Billing period</label>
+          <select id="f-term" name="term"><option value="monthly">Monthly</option><option value="annual">Annual — 2 months free</option></select>
+        </div>
+        <div class="field"><label for="f-scope">Target market / product line</label><input id="f-scope" name="scope" placeholder="e.g. UAE + Saudi, stainless pipe"></div>
+      </div>
+
+      <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY">
+      <input type="hidden" name="subject" id="f-subject" value="Fuels24 purchase">
+      <input type="hidden" name="from_name" value="Fuels24 website">
+      <input type="hidden" name="item" id="f-item-hidden">
+      <input type="hidden" name="amount_usd" id="f-amount-hidden">
+      <input type="hidden" name="invoice_no" id="f-invoice-hidden">
+      <input type="hidden" name="replyto" id="f-replyto">
+      <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+
+      <button class="btn" type="submit" id="buy-submit" style="width:100%;justify-content:center;margin-top:6px">Issue invoice &amp; email it to me</button>
+      <div class="modal-msg" id="buy-msg"></div>
+      <p class="modal-note" id="buy-note">The PDF invoice downloads to your device the moment you submit, and a copy is emailed to you and to us. Work begins when payment is confirmed. Not what you expected? Tell us within 7 days and we refund in full.</p>
+    </form>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap foot">
+    <div><strong style="color:var(--text)">Fuels24 Inc</strong><br>Deal intelligence for energy equipment manufacturers.</div>
+    <div>
+      <a href="mailto:z@fuels24.com">z@fuels24.com</a><br>
+      <a href="https://calendly.com/7989347/30min" target="_blank" rel="noopener">Book a call</a><br>
+      <a href="https://linkedin.com/in/glebzamyatin" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <div style="align-self:flex-end">© <span id="yr"></span> Fuels24 Inc. All rights reserved.</div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+/* ---------- live tracker ----------
+   Reads data/live.json, which the GitHub Action overwrites on a schedule.
+   Nothing here talks to an API directly — a static page cannot hold secrets. */
+(function(){
+  var STATUS = {
+    RUNNING:   {cls:'run', label:'Running'},
+    IDLE:      {cls:'idle',label:'Idle'},
+    REBUILDING:{cls:'reb', label:'Rebuilding'},
+    DESTROYED: {cls:'reb', label:'Damaged'},
+    NO_DATA:   {cls:'nod', label:'No data'}
+  };
+
+  function esc(s){
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  function ago(iso){
+    var t = Date.parse(iso);
+    if (isNaN(t)) return '—';
+    var m = Math.round((Date.now() - t) / 60000);
+    if (m < 60) return m + ' min ago';
+    var h = Math.round(m / 60);
+    if (h < 48) return h + ' h ago';
+    return Math.round(h / 24) + ' d ago';
+  }
+
+  function fail(msg){
+    document.getElementById('lv-trains').innerHTML =
+      '<div class="skeleton">' + esc(msg) + '</div>';
+    document.getElementById('lv-vessels').innerHTML = '';
+  }
+
+  fetch('data/live.json?t=' + Date.now(), {cache:'no-store'})
+    .then(function(r){ if(!r.ok) throw new Error('no feed'); return r.json(); })
+    .then(function(d){
+      if (d.site)         document.getElementById('lv-site').textContent = d.site;
+      if (d.updated_utc)  document.getElementById('lv-updated').textContent = ago(d.updated_utc);
+      if (d.demo)         document.getElementById('lv-demo').innerHTML =
+                            ' <span class="demo-badge">demo data</span>';
+
+      var tEl = document.getElementById('lv-trains');
+      var trains = d.trains || [];
+      tEl.innerHTML = trains.length ? trains.map(function(t){
+        var s = STATUS[t.status] || STATUS.NO_DATA;
+        var v = (t.frp_mw != null) ? (t.frp_mw + ' MW') : s.label;
+        return '<div class="row"><span class="nm"><span class="dot ' + s.cls + '"></span>' +
+               esc(t.name) + '</span><span class="val">' + esc(v) + '</span></div>';
+      }).join('') : '<div class="skeleton">No thermal reading in the last pass.</div>';
+
+      var vEl = document.getElementById('lv-vessels');
+      var ves = d.vessels_at_berth || [];
+      vEl.innerHTML = ves.length ? ves.map(function(v){
+        return '<div class="row"><span class="nm"><span class="dot run"></span>' +
+               esc(v.vessel) + '</span><span class="val">' + esc(v.berth) +
+               ' · ' + esc(v.hours) + ' h</span></div>';
+      }).join('') : '<div class="skeleton">No carrier alongside right now.</div>';
+
+      var st = d.last_7d;
+      if (st) {
+        document.getElementById('lv-stats').innerHTML =
+          '<div class="row" style="border-top:1px solid var(--line);padding-top:12px">' +
+          '<span class="nm" style="color:var(--muted)">Last 7 days</span>' +
+          '<span class="val">' + esc(st.calls) + ' calls · ' +
+          esc(st.loaded) + ' loaded</span></div>';
+      }
+    })
+    .catch(function(){
+      fail('Live feed unavailable at the moment. It refreshes every 6 hours — try again shortly, or email z@fuels24.com for the latest written brief.');
+    });
+})();
+
+/* ================= PURCHASE =================
+   Static site, so there is no server and no secret key anywhere in this file.
+   Three moving parts, all configured below in SETTINGS:
+     1. Web3Forms  — delivers the submission to you by email instantly.
+                     Put the access key in the hidden input in the form markup.
+     2. jsPDF      — builds the PDF invoice in the visitor's own browser and
+                     downloads it immediately. Nothing is uploaded anywhere.
+     3. Stripe     — optional card route: one Payment Link per item.
+*/
+(function(){
+
+  /* ---------------- SETTINGS — edit these ---------------- */
+  var SELLER = {
+    name:    'Fuels24 Inc',
+    email:   'z@fuels24.com',
+    site:    'fuels24.com',
+    address: ['Fuels24 Inc', 'ADD YOUR REGISTERED ADDRESS HERE'],
+    bank: [
+      'Beneficiary: Fuels24 Inc',
+      'Bank: ADD BANK NAME',
+      'IBAN / Account: ADD ACCOUNT',
+      'SWIFT / BIC: ADD SWIFT',
+      'Reference: the invoice number above'
+    ],
+    terms: 'Payment due within 7 days. Work starts on confirmed payment. Full refund if the first deliverable is not as expected, requested within 7 days of delivery.'
+  };
+
+  /* Stripe Payment Links. Create one link per item at dashboard.stripe.com
+     -> Payment links. Leave a value empty and the card route stays hidden
+     for that item. Keys must match the data-item text exactly. */
+  var STRIPE_LINKS = {
+    'Starter plan': '',
+    'Growth plan': '',
+    'Enterprise plan': '',
+    'Buyer Map': '',
+    'EPC Backlog Windows': '',
+    'End-User Demand Analysis': '',
+    'Trade-Show Sales Force Allocation': '',
+    'Tender Game Theory': '',
+    'Satellite Snapshot Analysis': '',
+    'Tanker Tracking AI Analysis': '',
+    'Inbound Email Intelligence — setup': ''
+  };
+  /* -------------- end of settings -------------- */
+
+  var modal   = document.getElementById('buy-modal');
+  var form    = document.getElementById('buy-form');
+  var msg     = document.getElementById('buy-msg');
+  var submit  = document.getElementById('buy-submit');
+  var itemEl  = document.getElementById('buy-item');
+  var termWrap= document.getElementById('term-wrap');
+  var current = { item:'', price:0, kind:'one-off', route:'invoice' };
+  var lastFocus = null;
+
+  function money(n){ return '$' + Number(n).toLocaleString('en-US'); }
+
+  function invoiceNumber(){
+    var d = new Date();
+    var p = function(x){ return String(x).padStart(2,'0'); };
+    return 'F24-' + d.getFullYear() + p(d.getMonth()+1) + p(d.getDate()) + '-' +
+           String(Math.floor(Math.random()*9000)+1000);
+  }
+
+  function describe(){
+    if (current.kind === 'subscription') {
+      var annual = document.getElementById('f-term').value === 'annual';
+      var amount = annual ? current.price * 10 : current.price;
+      return {
+        line: current.item + (annual ? ' — annual (10 months charged, 12 served)' : ' — first month'),
+        amount: amount
+      };
+    }
+    return { line: current.item + ' — one-off engagement', amount: current.price };
+  }
+
+  function openModal(btn){
+    lastFocus = btn;
+    current.item  = btn.getAttribute('data-item');
+    current.price = parseInt(btn.getAttribute('data-price'), 10);
+    current.kind  = btn.getAttribute('data-kind') || 'one-off';
+    termWrap.style.display = current.kind === 'subscription' ? '' : 'none';
+    refreshHeader();
+    msg.className = 'modal-msg';
+    msg.textContent = '';
+    setRoute('invoice');
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('f-name').focus();
+  }
+
+  function refreshHeader(){
+    var d = describe();
+    itemEl.textContent = d.line + '  ·  ' + money(d.amount) + ' USD';
+    document.getElementById('buy-title').textContent =
+      current.kind === 'subscription' ? 'Start your subscription' : 'Purchase this report';
+  }
+
+  function closeModal(){
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+    if (lastFocus) lastFocus.focus();
+  }
+
+  function setRoute(r){
+    current.route = r;
+    Array.prototype.forEach.call(document.querySelectorAll('.route'), function(b){
+      b.classList.toggle('active', b.getAttribute('data-route') === r);
+    });
+    if (r === 'card') {
+      submit.textContent = 'Continue to secure checkout';
+      document.getElementById('buy-note').textContent =
+        'You will be taken to our payment provider. We never see or store your card details. The receipt and invoice are emailed to you automatically.';
+    } else {
+      submit.textContent = 'Issue invoice & email it to me';
+      document.getElementById('buy-note').textContent =
+        'The PDF invoice downloads to your device the moment you submit, and a copy is emailed to you and to us. Work begins when payment is confirmed. Not what you expected? Tell us within 7 days and we refund in full.';
+    }
+  }
+
+  function buildPdf(data, no, d){
+    if (!window.jspdf || !window.jspdf.jsPDF) return null;
+    var doc = new window.jspdf.jsPDF({ unit:'pt', format:'a4' });
+    var L = 56, y = 64;
+
+    doc.setFont('helvetica','bold'); doc.setFontSize(22);
+    doc.text('INVOICE', L, y);
+    doc.setFontSize(11); doc.setFont('helvetica','normal');
+    doc.text(no, 540, y, {align:'right'});
+    y += 18;
+    doc.setTextColor(110);
+    doc.text('Issued ' + new Date().toISOString().slice(0,10), 540, y, {align:'right'});
+    doc.setTextColor(0);
+
+    y += 34;
+    doc.setFont('helvetica','bold'); doc.text('From', L, y);
+    doc.text('Bill to', 310, y);
+    doc.setFont('helvetica','normal'); doc.setFontSize(10);
+    var fy = y + 16, ty = y + 16, i;
+    var from = SELLER.address.concat([SELLER.email, SELLER.site]);
+    for (i = 0; i < from.length; i++){ doc.text(String(from[i]), L, fy); fy += 14; }
+    var to = [data.company, data.name, data.email, data.country];
+    if (data.address) to.splice(3, 0, data.address);
+    if (data.tax_id)  to.push('Tax ID: ' + data.tax_id);
+    for (i = 0; i < to.length; i++){ doc.text(String(to[i]), 310, ty); ty += 14; }
+
+    y = Math.max(fy, ty) + 26;
+    doc.setDrawColor(210); doc.line(L, y, 540, y); y += 20;
+    doc.setFont('helvetica','bold'); doc.setFontSize(10);
+    doc.text('Description', L, y); doc.text('Amount, USD', 540, y, {align:'right'});
+    y += 10; doc.line(L, y, 540, y); y += 22;
+
+    doc.setFont('helvetica','normal');
+    doc.text(doc.splitTextToSize(d.line, 330), L, y);
+    doc.text(Number(d.amount).toLocaleString('en-US') + '.00', 540, y, {align:'right'});
+    if (data.scope){
+      y += 16; doc.setTextColor(110);
+      doc.text(doc.splitTextToSize('Scope: ' + data.scope, 330), L, y);
+      doc.setTextColor(0);
+    }
+
+    y += 34; doc.line(L, y, 540, y); y += 22;
+    doc.setFont('helvetica','bold'); doc.setFontSize(13);
+    doc.text('Total due', L, y);
+    doc.text('USD ' + Number(d.amount).toLocaleString('en-US') + '.00', 540, y, {align:'right'});
+
+    y += 40; doc.setFont('helvetica','bold'); doc.setFontSize(10);
+    doc.text('Payment details', L, y); y += 16;
+    doc.setFont('helvetica','normal');
+    for (i = 0; i < SELLER.bank.length; i++){ doc.text(String(SELLER.bank[i]), L, y); y += 14; }
+
+    y += 16; doc.setTextColor(110); doc.setFontSize(9);
+    doc.text(doc.splitTextToSize(SELLER.terms, 484), L, y);
+
+    doc.setFontSize(8);
+    doc.text(SELLER.name + ' · ' + SELLER.email + ' · ' + SELLER.site, L, 800);
+    return doc;
+  }
+
+  /* open / close wiring */
+  Array.prototype.forEach.call(document.querySelectorAll('.buy'), function(b){
+    b.addEventListener('click', function(){ openModal(b); });
+  });
+  document.getElementById('buy-close').addEventListener('click', closeModal);
+  modal.addEventListener('click', function(e){ if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('.route'), function(b){
+    b.addEventListener('click', function(){ setRoute(b.getAttribute('data-route')); });
+  });
+  document.getElementById('f-term').addEventListener('change', refreshHeader);
+
+  /* submit */
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    msg.className = 'modal-msg';
+
+    if (!form.checkValidity()){
+      msg.className = 'modal-msg err';
+      msg.textContent = 'Please fill in name, work email, company and country.';
+      return;
+    }
+
+    var fd = new FormData(form);
+    var data = {
+      name: fd.get('name'), email: fd.get('email'), company: fd.get('company'),
+      country: fd.get('country'), tax_id: fd.get('tax_id'),
+      address: fd.get('address'), scope: fd.get('scope')
+    };
+    var d  = describe();
+    var no = invoiceNumber();
+
+    /* card route: hand over to the payment provider */
+    if (current.route === 'card'){
+      var link = STRIPE_LINKS[current.item];
+      if (link){
+        var sep = link.indexOf('?') > -1 ? '&' : '?';
+        window.location.href = link + sep +
+          'prefilled_email=' + encodeURIComponent(data.email) +
+          '&client_reference_id=' + encodeURIComponent(no);
+        return;
+      }
+      msg.className = 'modal-msg err';
+      msg.innerHTML = 'Card checkout is not open for this item yet. Switch to <b>Invoice / bank transfer</b>, or email ' +
+                      '<a href="mailto:' + SELLER.email + '" style="color:inherit">' + SELLER.email + '</a> and we will send a payment link.';
+      return;
+    }
+
+    /* invoice route */
+    document.getElementById('f-item-hidden').value    = d.line;
+    document.getElementById('f-amount-hidden').value  = d.amount;
+    document.getElementById('f-invoice-hidden').value = no;
+    document.getElementById('f-replyto').value        = data.email;
+    document.getElementById('f-subject').value        = 'Invoice ' + no + ' — ' + current.item + ' — ' + data.company;
+
+    var pdf = buildPdf(data, no, d);
+    if (pdf) pdf.save(no + '-' + String(data.company).replace(/[^A-Za-z0-9]+/g,'-') + '.pdf');
+
+    submit.disabled = true;
+    submit.textContent = 'Sending…';
+
+    fetch('https://api.web3forms.com/submit', { method:'POST', body: new FormData(form) })
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        if (!res.success) throw new Error('rejected');
+        msg.className = 'modal-msg ok';
+        msg.innerHTML = 'Invoice <b>' + no + '</b> has been downloaded to your device and emailed to <b>' +
+                        data.email + '</b>. We have it too and will confirm within one business day.';
+        form.reset();
+      })
+      .catch(function(){
+        msg.className = 'modal-msg err';
+        msg.innerHTML = 'Invoice <b>' + no + '</b> was created and downloaded to your device, but the email did not go out. ' +
+                        'Please send the PDF to <a href="mailto:' + SELLER.email + '" style="color:inherit">' + SELLER.email + '</a> and we will take it from there.';
+      })
+      .then(function(){
+        submit.disabled = false;
+        setRoute(current.route);
+      });
+  });
+})();
+</script>
+
+</body>
+</html>
