@@ -1,0 +1,21 @@
+{
+  "demo": true,
+  "site": "Ras Laffan, Qatar",
+  "updated_utc": "2026-10-27T03:00:00Z",
+  "satellite_pass_utc": "2026-10-24T07:12:00Z",
+  "ais_sample_utc": "2026-10-27T02:40:00Z",
+  "trains": [
+    { "name": "QE LNG North — Train 1", "status": "RUNNING",    "frp_mw": 46.8 },
+    { "name": "QE LNG North — Train 2", "status": "RUNNING",    "frp_mw": 51.2 },
+    { "name": "QE LNG North — Train 3", "status": "IDLE",       "frp_mw": null },
+    { "name": "QE LNG South — Train 4", "status": "RUNNING",    "frp_mw": 38.4 },
+    { "name": "QE LNG South — Train 5", "status": "REBUILDING", "frp_mw": null },
+    { "name": "Barzan gas plant",       "status": "NO_DATA",    "frp_mw": null }
+  ],
+  "vessels_at_berth": [
+    { "vessel": "AL SAFLIYA",  "berth": "Berth-3", "venture": "QE LNG North", "hours": 11 },
+    { "vessel": "AL GHARRAFA", "berth": "Berth-1", "venture": "QE LNG South", "hours": 6 }
+  ],
+  "last_7d": { "calls": 23, "loaded": 19 },
+  "sources": "Sentinel-2 (10 m, Copernicus) · VIIRS (375 m, NASA FIRMS) · AIS (aisstream.io)"
+}
